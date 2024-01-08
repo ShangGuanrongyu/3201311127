@@ -1,0 +1,70 @@
+//多种排序算法的比较与应用----归并排序
+#include<stdio.h>
+#define N 100
+
+void MergeSorting(int a[], int m, int mid, int n)
+{
+	int ch[N], i = m, j = mid + 1, k = 0;
+	while(i <= mid && j <= n)
+	{
+		if(a[i] <= a[j])
+		{
+			ch[k] = a[i];
+			i ++;
+			k ++;
+		}
+		else
+		{
+			ch[k] = a[j];
+			j ++;
+			k ++;
+		}
+	}
+	while(i <= mid)
+	{
+		ch[k] = a[i];
+		i ++;
+		k ++;
+	}
+	while(j <= n)
+	{
+		ch[k] = a[j];
+		j ++;
+		k ++;
+	}
+	for(k = 0, i = m; i <= n; k ++, i ++)
+		a[i] = ch[k];
+}
+
+void MergeSort(int a[], int m, int n)
+{
+    if (m < n)
+    {
+        int mid = (m + n) / 2;
+        MergeSort(a, m, mid);
+        MergeSort(a, mid + 1, n);
+        MergeSorting(a, m, mid, n);
+    }
+}
+
+void print(int a[], int n)
+{
+	int i;
+	for(i = 0; i < n;i ++)
+		printf("%d ", a[i]);
+	printf("\n");
+
+}
+
+int main(void)
+{
+	int a[] = {6, 12, 458, 5, 4, 28, 19, 1230, 9, 47};
+	int n = sizeof(a) / sizeof(a[0]);
+	int m = 0, mid = n / 2;
+	printf("排序前的的无序数组：\n");
+	print(a, n);
+	MergeSort(a, m, n - 1);
+	printf("归并排序后的数组：\n");
+	print(a, n);
+	return 0;
+}
