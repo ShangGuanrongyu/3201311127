@@ -1,0 +1,35 @@
+//算术表达式求值
+#include<stdio.h>
+
+int main(void)
+{
+	double a, b, sum, flag = 0;
+	char c;
+	scanf("%lf", &a);
+	sum = a;
+	scanf("%c%lf", &c, &b);
+	while(c != '\n')
+	{
+		if(c == '+')
+			sum += b;
+		else if(c == '-') 
+			sum -= b;
+		else if(c == '*')
+			sum *= b;
+		else if(c == '/')
+		{
+			if(b != 0)
+				sum /= b;
+			else
+			{
+				flag = 1;
+				printf("ERROR!除数不能为零！\n");
+				break;
+			}
+		}
+		scanf("%c%lf", &c, &b);
+	}
+	if(flag == 0)
+		printf("%.2f\n", sum);
+	return 0;
+}
