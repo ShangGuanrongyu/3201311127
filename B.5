@@ -1,0 +1,72 @@
+//遍历
+#include<stdio.h>
+#include<stdlib.h>
+#define LEN sizeof(SS)
+
+typedef struct Node{
+    int data;
+    struct Node *left;
+    struct Node *right;
+}SS;
+
+//创建二叉树
+SS *Create(int data)
+{
+	SS *node = (SS *)malloc(LEN);
+	node -> data = data;
+	node -> left = NULL;
+	node -> right = NULL;
+	return node;
+}
+
+//前序遍历
+void PreOrder(SS *root)
+{
+    if(root == NULL)
+        return;
+    printf("%d ", root -> data);
+    PreOrder(root -> left);
+    PreOrder(root -> right);
+}
+
+//中序遍历
+void InOrder(SS *root)
+{
+    if(root == NULL)
+        return;
+    
+    InOrder(root -> left);
+    printf("%d ", root -> data);
+    InOrder(root -> right);
+}
+
+//后序遍历
+void PostOrder(SS *root)
+{
+    if(root == NULL)
+        return;
+    
+    PostOrder(root -> left);
+    PostOrder(root -> right);
+    printf("%d ", root -> data);
+}
+
+int main(void)
+{
+	SS *root = Create(1);
+	root -> left = Create(2);
+	root -> right = Create(3);
+	root -> left -> left = Create(4);
+	root -> left -> right = Create(5);
+	root -> right -> left = Create(8);
+	root -> right -> left -> left = Create(7);	
+	root -> right -> left -> left -> left = Create(6);
+    printf("前序遍历：");
+    PreOrder(root);
+    printf("\n中序遍历：");
+    InOrder(root);
+    printf("\n后序遍历：");
+    PostOrder(root);
+    printf("\n");
+    return 0;
+}
