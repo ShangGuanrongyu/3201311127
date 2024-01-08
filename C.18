@@ -1,0 +1,127 @@
+//集合的交集和并集
+#include <stdio.h> 
+#include <stdlib.h>
+#define LEN sizeof(SS)
+
+typedef struct Node
+{
+    int num;
+    struct Node *next;
+}SS;
+
+SS *Create(void)
+{
+    SS *p, *q = NULL, *h = NULL;
+    int n;
+    h = (SS *)malloc(LEN);
+    h -> next = NULL;
+    q = h;
+    scanf("%d",&n);    
+    while(n != -1)
+    {
+        p = (SS *)malloc(LEN);
+        p -> num = n;
+        p -> next = NULL;        
+        q -> next = p;
+        q = p;
+        scanf("%d", &n);
+    }
+    return h;
+}
+
+SS *Combine1(SS *p, SS *q)
+{
+    SS *h = NULL, *t = NULL, *temp = NULL;
+    h = (SS *)malloc(LEN);    
+    t = h;
+    p = p -> next;
+    q = q -> next;
+    while(p != NULL && q != NULL)
+    {
+        if(p -> num < q -> num)
+        {
+            temp = p;
+            p = p -> next;
+        }            
+        else if(p -> num > q -> num)
+        {
+            temp = q;
+            q = q -> next;
+        }
+		else
+		{
+			temp = p;
+			p = p -> next;
+			q = q -> next;
+		}
+		t -> next = temp;
+		t = t -> next;
+    }
+    if(p == NULL)
+        t -> next = q;
+    else if(q == NULL)
+        t -> next = p;
+    return h;
+}
+
+SS *Combine2(SS *p,SS *q)
+{
+    SS *h = NULL, *t = NULL, *r = NULL;    
+    while(p != NULL && q != NULL)
+    {
+        if(p -> num < q -> num)
+            p = p -> next;
+        else if(p -> num > q -> num)
+            q = q -> next;
+        else if(p -> num == q -> num)
+        {
+            t = (SS *)malloc(LEN);
+            t -> num = p -> num;
+            t -> next = NULL;
+            if(h == NULL)
+                h = t;
+            else
+                r -> next = t;
+            r = t;
+            p = p -> next;
+            q = q -> next;
+        }
+    }
+    return h;
+}
+
+void print(SS *h)
+{
+    h = h -> next;
+    if(h == NULL)
+        printf("NULL\n");
+    else
+	{
+        while(h != NULL)
+        {
+            printf("%d ", h -> num);
+            h = h -> next;
+        }
+		printf("\n");
+	}
+}
+
+int main(void)
+{
+    SS *Create(void);
+    SS *Combine1(SS *p, SS *q);
+	SS *Combine2(SS *p, SS *q);
+    void print(SS *h);
+    SS *h1, *h2, *h3, *h4, *h5, *h6;
+    h1 = Create();
+    h2 = Create();
+    h3 = Combine1(h1, h2);
+	printf("两集合的并集：");
+    print(h3);
+	h5 = Create();
+	h6 = Create();
+	h4 = Combine2(h5, h6);
+	printf("两集合的交集：");
+	print(h4);
+    return 0;
+}
