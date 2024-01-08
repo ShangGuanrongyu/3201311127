@@ -1,0 +1,61 @@
+//多种排序算法的比较与应用----堆排序
+#include<stdio.h>
+
+void sift(int a[], int m, int n)
+{
+	int i = m, j = 2 * i, temp = a[i];
+	while(j < n)
+	{
+		if(j < n - 1 && a[j] < a[j + 1])
+			j ++;
+		if(temp < a[j])
+		{
+			a[i] = a[j];
+			i = j;
+			j = 2 * i;
+		}
+		else break;
+	}
+	a[i] = temp;
+}
+
+void swap(int a[], int i, int j)
+{
+	int temp;
+	temp = a[i];
+	a[i] = a[j];
+	a[j] = temp;
+}
+
+void HeapSorting(int a[], int n)
+{
+	int i;
+	for(i = n / 2 - 1; i >= 0; i --)
+		sift(a, i, n);
+	for(i = n - 1; i > 0;i --)
+	{
+		swap(a, 0, i);
+		sift(a, 0, i);
+	}
+}
+
+void print(int a[], int n)
+{
+	int i;
+	for(i = 0; i < n;i ++)
+		printf("%d ", a[i]);
+	printf("\n");
+}
+
+int main(void)
+{
+	int a[] = {6, 12, 458, 5, 4, 28, 19, 1230, 9, 47};
+	int n = sizeof(a) / sizeof(a[0]);
+	int m = 0;
+	printf("排序前的的无序数组：\n");
+	print(a, n);
+	HeapSorting(a, n);
+	printf("堆排序后的数组：\n");
+	print(a, n);
+	return 0;
+}
