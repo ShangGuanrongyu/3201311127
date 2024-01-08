@@ -1,0 +1,55 @@
+//二叉树公共祖先
+#include <stdio.h>
+#define MAX 100
+
+typedef struct Node{
+    int num;
+}ElemType;
+
+typedef struct Tree{
+    ElemType a[MAX];
+    int length;
+}SS;
+
+int Search(SS T, int x)
+{
+    int i;
+    for(i = 0; i < T.length; i++)
+        if(T.a[i].num == x)
+            return i;
+    return -1;
+}
+
+int LCA(SS T, int i, int j)
+{
+	int index_i, index_j, index_max, index_min;
+    index_i = Search(T, i);
+    index_j = Search(T, j);
+    index_min = (index_i < index_j) ? index_i : index_j;
+    index_max = (index_i > index_j) ? index_i : index_j;
+    while(index_min <= index_max)
+	{
+        if(T.a[index_min].num == i || T.a[index_min].num == j)
+            return T.a[index_min].num;
+        index_min ++;
+    }
+    return -1;
+}
+
+int main(void)
+{
+    SS T;
+    T.length = 9;
+    T.a[0].num = 1;
+    T.a[1].num = 2;
+    T.a[2].num = 3;
+    T.a[3].num = 4;
+    T.a[4].num = 5;
+    T.a[5].num = 6;
+    T.a[6].num = 7;
+    T.a[7].num = 8;
+    T.a[8].num = 9;
+    printf("节点2和节点4的最近公共祖先是：%d\n", LCA(T, 2, 4));
+    printf("节点5和节点9的最近公共祖先是：%d\n", LCA(T, 5, 9));
+    return 0;
+}
