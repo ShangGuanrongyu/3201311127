@@ -1,0 +1,35 @@
+//英文句子格式化
+#include <stdio.h>
+#include <ctype.h>
+#define N 1000
+
+int main(void)
+{
+    int i = 0, j = 0;
+    char str[N];
+    fgets(str, N, stdin);
+    while (str[i] != '\0')
+    {
+        if(isspace(str[i]))
+		{
+			if(j > 0 && !isspace(str[j - 1]))
+			{
+				str[j] = ' ';
+                j ++;
+			}
+            i++;
+		}
+        else
+        {
+            str[j] = str[i];
+            i ++;
+            j ++;
+        }
+    }
+    if (j > 0 && isspace(str[j - 1]))
+        j--;
+    str[j] = '\0';
+    printf("%s\n", str);
+    return 0;
+}
+
