@@ -1,0 +1,49 @@
+//约瑟夫环问题
+#include<stdio.h>
+#include<stdlib.h>
+#define LEN sizeof(SS)
+
+typedef struct Node{
+	int num;
+	struct Node *next;
+}SS;
+
+void Create(int n, int m)
+{
+	SS *p, *q, *t;
+	int i;
+	p = (SS *)malloc(LEN);
+	p -> num = 1;
+	q = p;
+	for(i = 2; i <= n; i ++)
+	{
+		q -> next = (SS *)malloc(LEN);
+		q -> next -> num = i;
+		q = q -> next;
+	}
+	q -> next = p;
+	q = p;
+	while(q -> next != q)
+	{
+		for(i = 1; i < m; i ++)
+			q = q -> next;
+		printf("被淘汰的人：%d\n", q -> next -> num);
+		t = q -> next;
+		q -> next = t -> next;
+		free(t);
+		q = q -> next;
+	}
+	printf("最后剩下的人：%d\n", q -> num);
+}
+
+int main(void)
+{
+	int n,m;
+	printf("总人数：");
+	scanf("%d", &n);
+	printf("报数间隔：");
+	scanf("%d", &m);
+	if(n > 0 && m > 0 && n > m)
+		Create(n, m);
+	return 0;
+}
