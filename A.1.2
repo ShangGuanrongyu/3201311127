@@ -1,0 +1,60 @@
+//多种排序算法的比较与应用----快速排序
+#include<stdio.h>
+
+int partition(int a[], int m, int n)
+{
+	int i = m, j = n;
+	int temp = a[i];
+	while(i < j)
+	{
+		while(j > i && a[j] >= temp)
+			j --;
+		if(i < j)
+		{
+			a[i] = a[j];
+			i ++;
+		}
+		while(i < j && a[i] <= temp)
+			i ++;
+		if(i < j)
+		{
+			a[j] = a[i];
+			j --;
+		}
+	}
+	a[i] = temp;
+	return i;
+}
+
+void QuickSorting(int a[], int m, int n)
+{
+	int i;
+	if(m < n)
+	{
+		i = partition(a, m, n);
+		QuickSorting(a, m, i - 1);
+		QuickSorting(a, i + 1, n);
+	}
+}
+
+void print(int a[], int n)
+{
+	int i;
+	for(i = 0; i < n;i ++)
+		printf("%d ", a[i]);
+	printf("\n");
+
+}
+
+int main(void)
+{
+	int a[] = {6, 12, 458, 5, 4, 28, 19, 1230, 9, 47};
+	int n = sizeof(a) / sizeof(a[0]);
+	int m = 0;
+	printf("排序前的的无序数组：\n");
+	print(a, n);
+	QuickSorting(a, m, n - 1);
+	printf("快速排序后的数组：\n");
+	print(a, n);
+	return 0;
+}
