@@ -1,0 +1,119 @@
+//迷宫
+#include <stdio.h>
+#include <stdlib.h>
+
+#define LEN1 sizeof(Node)
+#define LEN2 sizeof(int)
+#define LEN3 sizeof(int *)
+
+typedef struct Node{
+    int x;
+    int y;
+    int step;
+    struct Node *next;
+}Node;
+
+Node* Create(int x, int y, int step)
+{
+    Node *node = (Node *)malloc(LEN1);
+    node -> x = x;
+    node -> y = y;
+    node -> step = step;
+    node -> next = NULL;
+    return node;
+}
+
+void enqueue(Node **head, Node **tail, int x, int y, int step)
+{
+    Node *node = Create(x, y, step);
+    if(*head == NULL)
+        *head = node;
+    else
+        (*tail) -> next = node;
+    *tail = node;
+}
+
+void dequeue(Node **head)
+{
+    if(*head == NULL)
+        return;
+    Node *temp = *head;
+    *head = (*head) -> next;
+    free(temp);
+}
+
+int isEmpty(Node *head)
+{
+    return head == NULL;
+}
+
+int isInRange(int x, int y, int N, int M)
+{
+    return x >= 0 && x < N && y >= 0 && y < M;
+}
+
+int BFS(int N, int M, int **maze, int x1, int y1, int x2, int y2, int **visited)
+{
+    int dx[] = {-1, 1, 0, 0};
+    int dy[] = {0, 0, -1, 1};
+    Node *head = NULL;
+    Node *tail = NULL;
+    enqueue(&head, &tail, x1, y1, 0);
+    visited[x1][y1] = 1;
+    while (!isEmpty(head))
+    {
+        int x = head -> x;
+        int y = head -> y;
+        int step = head -> step;
+        dequeue(&head);
+        if (x == x2 && y == y2)
+            return step;
+        for (int i = 0; i < 4; i ++)
+        {
+            int x3 = x + dx[i];
+            int y3 = y + dy[i];
+            if(isInRange(x3, y3, N, M) && maze[x3][y3] == 0 && !visited[x3][y3])
+            {
+                enqueue(&head, &tail, x3, y3, step + 1);
+                visited[x3][y3] = 1;
+            }
+        }
+    }
+    return -1;
+}
+
+int main(void)
+{
+    int i, j, N, M;
+    scanf("%d%d", &N, &M);
+    int** maze = (int **)malloc(N * LEN3);
+    for (i = 0; i < N; i ++)
+    {
+        maze[i] = (int *)malloc(M * LEN2);
+        for (j = 0; j < M; j ++)
+            scanf("%d", &maze[i][j]);
+    }
+    int x1, y1, x2, y2;
+    scanf("%d%d%d%d", &x1, &y1, &x2, &y2);
+
+    int** visited = (int **)malloc(N * LEN3);
+    for (i = 0; i < N; i ++)
+    {
+        visited[i] = (int *)malloc(M * LEN2);
+        for (j = 0; j < M; j ++)
+            visited[i][j] = 0;
+    }
+    int shortestPath = BFS(N, M, maze, x1, y1, x2, y2, visited);
+    if(shortestPath != -1)
+        printf("最短路径步数为：%d\n", shortestPath);
+    else
+        printf("无法到达终点！\n");
+    for(i = 0; i < N; i ++)
+    {
+        free(maze[i]);
+        free(visited[i]);
+    }
+    free(maze);
+    free(visited);
+    return 0;
+}
