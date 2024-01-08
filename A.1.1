@@ -1,0 +1,44 @@
+//多种排序算法的比较与应用----希尔排序
+#include<stdio.h>
+
+void ShellSorting(int a[], int n)  //希尔排序算法
+{
+	int i, j, d,temp;
+	d = n / 2;                     //增量置初值
+	while(d > 0)
+	{
+		for(i = d; i < n; i ++)    //对所有组采用直接插入排序
+		{
+			temp = a[i];           //对相隔 d 个位置的一组采用直接插入排序
+			j = i - d;
+			while(j >= 0 && temp < a[j])
+			{
+				a[j + d] = a[j];
+				j = j - d;
+			}
+			a[j + d] = temp;
+		}
+		d = d / 2;                 //减小增量
+	}
+}
+
+void print(int a[], int n)
+{
+	int i;
+	for(i = 0; i < n;i ++)
+		printf("%d ", a[i]);
+	printf("\n");
+
+}
+
+int main(void)
+{
+	int a[] = {6, 12, 458, 5, 4, 28, 19, 1230, 9, 47};
+	int n = sizeof(a) / sizeof(a[0]);
+	printf("排序前的的无序数组：\n");
+	print(a, n);
+	ShellSorting(a, n);
+	printf("希尔排序后的数组：\n");
+	print(a, n);
+	return 0;
+}
