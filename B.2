@@ -1,0 +1,77 @@
+//路由
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#define INF 999999
+#define LEN1 sizeof(Graph)
+#define LEN2 sizeof(Edge)
+
+const int N = 110;
+
+int E, V;
+int dist[N];
+int back[N];
+
+// 边的结构体
+struct Edge{
+    int src, dest, weight;
+};
+
+// 图的结构体
+struct Graph{
+    int V, E;
+    Edge *edge;
+};
+
+// 创建图
+Graph *createGraph(int V, int E)
+{
+    Graph *graph = (Graph *)malloc(LEN1);
+    graph -> V = V;
+    graph -> E = E;
+    graph -> edge = (Edge *)malloc(E * LEN2);
+    return graph;
+}
+
+// 执行Bellman-Ford算法
+void BellmanFord(Graph *graph, int src)
+{
+    int V = graph -> V;
+    int E = graph -> E;
+    int i, j, u, v, weight;
+    int m = E;
+    // 初始化所有顶点到源点的距离为无穷大
+    memset(dist, 0x3f, sizeof dist);
+    memset(back, 0x3f, sizeof back);
+    dist[src] = 0;
+    for (j = 0; j < E; j++)
+	{
+		u = graph -> edge[j].src;
+        v = graph -> edge[j].dest;
+        weight = graph -> edge[j].weight;
+        if (dist[u] != INF && dist[u] + weight < dist[v])
+			dist[v] = dist[u] + weight;
+	}
+    // 输出最短路径长度
+    for (i = 0; i < V; i++)
+	{
+        if (dist[i] > 10000)
+            printf("INF\n");
+        else
+            printf("%d\n", dist[i]);
+    }
+}
+
+int main(void)
+{
+    int i, src;
+    scanf("%d %d", &V, &E);
+    Graph *graph = createGraph(V, E);
+    for(i = 0; i < E; i++)
+        scanf("%d %d %d", &(graph -> edge[i].src), &(graph -> edge[i].dest), &(graph -> edge[i].weight));
+    scanf("%d", &src);
+    BellmanFord(graph, src);
+    free(graph->edge);
+    free(graph);
+    return 0;
+}
