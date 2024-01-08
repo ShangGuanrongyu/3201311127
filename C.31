@@ -1,0 +1,65 @@
+//二叉树路径输出
+#include<stdio.h>
+#include<stdlib.h>
+#define LEN sizeof(SS)
+#define N 100
+
+typedef struct Node{
+	char ch;
+	struct Node *left;
+	struct Node *right;
+}SS;
+
+SS *Create(char ch)
+{
+	SS *node;
+	node = (SS *)malloc(LEN);
+	node -> ch = ch;
+	node -> left = NULL;
+	node -> right = NULL;
+	return node;
+}
+
+void Find(SS *node, char path[], int pathlen, char val, int *flag)
+{
+	int i;
+	if(node == NULL)
+		return;
+	path[pathlen ++] = node -> ch;
+	if(node -> left == NULL && node -> right == NULL && node -> ch == val)
+	{
+		printf("从根节点到'%c'的路径：", val);
+		for(i = 0; i < pathlen; i ++)
+			printf("%c ", path[i]);
+		printf("\n");
+		*flag = 1;
+	}
+	Find(node -> left, path, pathlen, val, flag);
+	Find(node -> right, path, pathlen, val, flag);
+}
+
+void print(SS *root, char val)
+{	
+	char path[N];
+	int pathlen = 0, flag = 0;
+	if(root == NULL)
+	{
+		printf("目标叶子节点不存在\n");
+		return;
+	}
+	Find(root, path, pathlen, val, &flag);
+	if(!flag)
+		printf("目标叶子节点不存在\n");
+}
+
+int main(void)
+{
+	SS *root = Create('A');
+	root -> left = Create('B');
+	root -> right = Create('C');
+	root -> left -> left = Create('D');
+	root -> left -> right = Create('E');
+	root -> right -> left = Create('F');
+	print(root, 'F');
+	return 0;
+}
