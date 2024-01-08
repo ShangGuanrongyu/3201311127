@@ -1,0 +1,25 @@
+//换硬币
+#include<stdio.h>
+int main(void)
+{
+	int n, temp = 0, flag = 0;
+	printf("需要找零的金额：");
+	scanf("%d", &n);
+	if(n % 25 == 0)
+		printf("%d个25分硬币\n", n / 25);
+	else if(n % 5 == 0)
+	{
+		temp = n / 25;
+		n = n % 25;
+		printf("%d个25分硬币和%d个5分硬币\n", temp, n / 5);
+	}
+	else
+	{
+		temp = n / 25;
+		n = n % 25;
+		flag = n / 5;
+		n = n % 5;
+		printf("%d个25分硬币和%d个5分硬币和%d个1分硬币\n", temp, flag, n);
+	}
+	return 0;
+}
