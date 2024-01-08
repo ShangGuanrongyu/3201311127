@@ -1,0 +1,90 @@
+//链表奇偶拆分
+#include<stdio.h>
+#include<stdlib.h>
+#define LEN sizeof(SS)
+
+typedef struct Node{
+	int num;
+	struct Node *next;
+}SS;
+
+SS *Create(void)
+{
+	SS *p, *h = NULL, *q = NULL;
+	p = (SS *)malloc(LEN);
+	scanf("%d", &p -> num);
+	while(p -> num != -1)
+	{
+		p -> next = NULL;
+		if(h == NULL)
+			h = p;
+		else
+			q -> next = p;
+		q = p;
+		p = (SS *)malloc(LEN);
+		scanf("%d", &p -> num);
+	}
+	return h;
+}
+
+void ParitySeparation(SS *p, SS **odd, SS **even)
+{
+	SS *t, *h1 = NULL, *h2 = NULL;
+	while(p)
+	{
+		if(p -> num %2 == 1)
+		{
+			if(h1 == NULL)
+			{
+				h1 = p;
+				*odd = h1;
+			}
+			else
+			{
+				h1 -> next = p;
+				h1 = h1->next;
+			}
+		}
+		else
+		{
+			if(h2 == NULL)
+			{
+				h2 = p;
+				*even = h2;
+			}
+			else
+			{
+				h2 -> next = p;
+				h2 = h2 -> next;
+			}
+		}
+		t = p;
+		p = p -> next;
+		t -> next = NULL;
+	}
+}
+
+void print(SS *h)
+{
+	while(h != NULL)
+	{
+		printf("%d ", h -> num);
+		h = h -> next;
+	}
+	printf("\n");
+}
+
+int main(void)
+{
+	SS *head, *odd = NULL, *even = NULL;
+	//SS *Create(void);
+	//void print(SS *h);
+	head = Create();	
+	//SS ParitySeparation(SS *p, SS *odd, SS *even);
+	ParitySeparation(head, &odd, &even);
+	printf("L1：");
+	print(odd);
+	printf("L2：");
+	print(even);
+	return 0;
+}
