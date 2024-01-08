@@ -1,0 +1,42 @@
+//十进制转换成其他进制
+#include<stdio.h>
+
+void dec2bin(int n)
+{
+	if(n > 1)
+		dec2bin(n / 2);
+	printf("%d", n % 2);
+}
+
+void dec2oct(int n)
+{
+	if(n > 7)
+		dec2oct(n / 8);
+	printf("%d", n % 8);
+}
+
+void dec2hex(int n)
+{
+	int temp = n % 16;
+	if(n > 15)
+		dec2hex(n / 16);
+	if(temp < 10)
+		printf("%c", temp + '0');
+	else
+		printf("%c", temp - 10 + 'A');
+}
+
+int main(void)
+{
+	int n;
+	printf("十进制数：");
+	scanf("%d", &n);
+	printf("期望输出\n二进制：");
+	dec2bin(n);
+	printf("\n八进制：");
+	dec2oct(n);
+	printf("\n十六进制：");
+	dec2hex(n);
+	printf("\n");
+	return 0;
+}
