@@ -1,0 +1,59 @@
+//最长路径问题
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 100
+
+int Max(int a, int b)
+{
+    return (a > b) ? a : b;
+}
+
+void DFS(int node, int numNodes, int **graph, int *visited, int *path, int *longestPath)
+{
+	int i;
+    visited[node] = 1;
+    for(i = 0; i < numNodes; i ++)
+	{
+        if(graph[node][i] != 0 && !visited[i])
+		{
+            path[i] = path[node] + graph[node][i]; // 更新路径长度
+            DFS(i, numNodes, graph, visited, path, longestPath);
+            *longestPath = Max(*longestPath, path[i]);
+        }
+    }
+}
+
+int FindPath(int numNodes, int** graph, int startnode, int endnode)
+{
+    int visited[MAX] = {0}, path[MAX] = {0}, longestPath = 0;
+    DFS(startnode, numNodes, graph, visited, path, &longestPath);
+    return path[endnode];
+}
+
+int main(void)
+{
+    int i, numNodes, numEdges, start, end, weight, startnode, endnode;
+    printf("请输入节点数和边数：");
+    scanf("%d%d", &numNodes, &numEdges);
+    int **graph = (int **)malloc(numNodes * sizeof(int *));
+    for(i = 0; i < numNodes; i ++)
+        graph[i] = (int *)calloc(numNodes, sizeof(int));
+    printf("请输入边的信息（起点、终点、权重）：\n");
+    for(i = 0; i < numEdges; i ++)
+	{
+        scanf("%d%d%d", &start, &end, &weight);
+        graph[start][end] = weight;
+    }
+    printf("请输入起点和终点：");
+    scanf("%d%d", &startnode, &endnode);
+    int result = FindPath(numNodes, graph, startnode, endnode);
+    if(result == 0)
+        printf("不存在从起点到终点的路径。\n");
+    else
+        printf("最长路径的权重为：%d\n", result);
+    for(i = 0; i < numNodes; i ++)
+        free(graph[i]);
+    free(graph);
+    return 0;
+}
