@@ -1,0 +1,18 @@
+//最短全排列路径
+#include <stdio.h>
+#define N 100
+
+int main(void)
+{
+    int arr[N], n, i, j, count = 0;
+	printf("排列的元素个数：");
+    scanf("%d", &n);
+    for(i = 0; i < n; i++)
+        scanf("%d", &arr[i]);
+    for(i = 0; i < n - 1; i++)
+        for(j = i + 1; j < n; j++)
+            if(arr[i] > arr[j])
+                count++;
+    printf("最少的交换步数：%d\n", count);
+    return 0;
+}
