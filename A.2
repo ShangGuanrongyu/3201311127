@@ -1,0 +1,127 @@
+//通讯录的散列表设计与性能分析----线性探测法
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#define N 81
+#define MAX 100
+#define LEN1 sizeof(Hash)
+#define LEN2 sizeof(AB)
+
+typedef struct Address_Book{
+	int number;
+	char name[N];
+	struct Address_Book *next;
+	int index;
+}AB;
+
+typedef struct{
+	int key;
+	int count;
+}Hash;
+
+int HashFunction(int number)
+{
+	return number % MAX;
+}
+
+int LinearProbing(int index, int i)
+{
+	return (index + i) % MAX;
+}
+
+void Insert(Hash *node, AB *address_book[], int number, char name[])
+{
+	int index, i = 0;
+	index = HashFunction(number);
+	while(node[index].key != -1 && node[index].key != number)
+	{
+		i ++;
+		index = LinearProbing(HashFunction(number), i);
+	}
+	node[index].key = number;
+	AB *new_node = (AB *)malloc(LEN2);
+	new_node -> number = number;
+	strcpy(new_node -> name, name);
+	new_node -> next = NULL;
+	new_node -> index = index;
+	if(address_book[index] == NULL)
+		address_book[index] = new_node;
+	else
+	{
+		AB *temp = address_book[index];
+		while(temp -> next != NULL)
+			temp = temp ->next;
+		temp -> next = new_node;
+	}
+}
+
+AB *SearchHash(Hash *node, AB *address_book[], int number)
+{
+	int index, i = 0;
+	index = HashFunction(number);
+	while(node[index].key != -1)
+	{
+		if(node[index].key == number)
+			return address_book[index];
+		i ++;
+		index = LinearProbing(HashFunction(number), i);
+	}
+	return NULL;
+}
+
+int main(void)
+{
+	int choice, number;
+	char name[N];
+	Hash node[MAX];
+	memset(node, -1, LEN1 * MAX);
+	AB *address_book[MAX] = {NULL};
+	printf("1. 插入记录\n");
+	printf("2. 查询记录\n");
+	printf("3. 退出\n");
+	while(1)
+	{
+		printf("\n请输入你的选择：");
+		scanf("%d", &choice);
+		switch(choice)
+		{
+			case 1:
+			{
+				printf("请输入需要添加的电话号码：");
+				scanf("%d", &number);
+				printf("请输入需要添加的姓名：");
+				scanf("%s", name);
+				Insert(node, address_book, number, name);
+				printf("联系人添加成功！\n");
+				break;
+			}
+			case 2:
+			{
+				printf("请输入需要查询的电话号码：");
+				scanf("%d", &number);
+				AB *result = SearchHash(node, address_book, number);
+				if(result != NULL)
+					printf("找到联系人：%s，电话号码：%d\n", result -> name, result -> number);
+				else
+					printf("该通讯录没有此联系人！\n");
+				break;
+			}
+			case 3:
+				return 0;
+			default:
+				printf("ERROR！请重新输入！\n");
+		}
+	}
+	return 0;
+}
+/*
+随机电话号码
+10009458
+10007015
+10004956
+10028338
+10021376
+10016213
+10028936
+10006016
+*/
