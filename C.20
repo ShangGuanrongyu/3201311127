@@ -1,0 +1,54 @@
+//两序列中位数问题
+#include<stdio.h>
+#define N 100
+
+void Combine(int n, int a[], int m, int b[], int c[])
+{
+	int i = 0, j = 0, k = 0;
+	while(i < n && j < m)
+	{
+		if(a[i] < b[j])
+			c[k ++] = a[i ++];
+		else
+			c[k ++] = b[j ++];
+	}
+	while(i < n)
+		c[k ++] = a[i ++];
+	while(j < m)
+		c[k ++] = b[j ++];
+}
+
+double Median(int c[], int sum)
+{
+	int left, right, mid;
+	if(sum % 2 == 0)
+	{
+		left = sum / 2 - 1;
+		right = sum / 2;
+		return (c[left] + c[right]) / 2.0;
+	}
+	else
+	{
+		mid = sum / 2;
+		return c[mid];
+	}
+}
+
+int main(void)
+{
+	int a[N], b[N], c[N], n, m, i, sum;
+	double mid;
+	printf("序列A的元素个数：");
+	scanf("%d", &n);
+	printf("序列B的元素个数：");
+	scanf("%d", &m);
+	sum = n + m;
+	for(i = 0; i < n;i ++)
+		scanf("%d", &a[i]);
+	for(i = 0; i < m;i ++)
+		scanf("%d", &b[i]);
+	Combine(n, a, m, b, c);
+	mid = Median(c, sum);
+	printf("序列A和B的并集的中位数：%.1f\n", mid);
+	return 0;
+}
