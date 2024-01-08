@@ -1,0 +1,53 @@
+//八皇后
+#include<stdio.h>
+#define N 8
+
+int chessboard[N][N];
+
+int Queen(int n, int m)
+{
+	int i, j;
+	for(i = 0; i < n; i ++)
+		if(chessboard[i][m])
+			return 0;
+	for(i = n, j = m; i >= 0 && j >= 0; i --, j --)
+		if(chessboard[i][j])
+			return 0;
+	for(i = n, j = m; i >= 0 && j < N; i --, j ++)
+		if(chessboard[i][j])
+			return 0;
+	return 1;
+}
+
+void SolveQueen(int n)
+{
+	int i, j;
+	if(n == N)
+	{
+		for(i = 0; i < N; i ++)
+			for(j = 0; j < N; j ++)
+				if(chessboard[i][j])
+					printf("(%d, %d) ", i, j);
+		printf("\n");
+		return;
+	}
+	for(i = 0; i < N; i ++)
+	{
+		if(Queen(n, i))
+		{
+			chessboard[n][i] = 1;
+			SolveQueen(n + 1);
+			chessboard[n][i] = 0;
+		}
+	}
+}
+
+int main(void)
+{
+	int i, j;
+	for(i = 0; i < N; i ++)
+		for(j = 0; j < N; j ++)
+			chessboard[i][j] = 0;
+	SolveQueen(0);
+	return 0;
+}
