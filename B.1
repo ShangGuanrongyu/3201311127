@@ -1,0 +1,86 @@
+//最长回文子序列
+#include <stdio.h>
+#include <string.h>
+#define N 1000
+
+//Manacher算法
+void Manacher(char *s)
+{
+    int i, len, temp, p[N] = {0}, id = 0, mx = 0, resLen = 0, resCenter = 0;
+	char t[N];
+	len = strlen(s);
+    if(len == 0)
+        return;
+    t[0] = '$';
+    t[1] = '#';
+    for(i = 0; i < len; i ++)
+	{
+        t[i * 2 + 2] = s[i];
+        t[i * 2 + 3] = '#';
+    }
+    for(i = 1; i < 2 * len + 2; i ++)
+	{
+		temp = p[2 * id - i] < mx - i ? p[2 * id - i] : mx - i;
+        p[i] = mx > i ? temp : 1;
+        while(t[i + p[i]] == t[i - p[i]])
+            p[i] ++;
+        if(mx < i + p[i])
+		{
+            mx = i + p[i];
+            id = i;
+        }
+        if(resLen < p[i])
+		{
+            resLen = p[i];
+            resCenter = i;
+        }
+    }
+    printf("最长回文子序列: ");
+    for(i = resCenter - resLen + 1; i < resCenter + resLen; i ++)
+        if(t[i] != '#')
+            printf("%c", t[i]);
+}
+
+// 暴力匹配算法
+void ForceMatch(char *s)
+{
+    int i, j, len, left, right, isPalindrome, maxlen = 0, start = 0;
+	len = strlen(s);
+    for(i = 0; i < len; i ++)
+        for(j = i; j < len; j ++)
+		{
+            left = i, right = j;
+            isPalindrome = 1;
+            while(left < right)
+			{
+                if(s[left] != s[right])
+				{
+                    isPalindrome = 0;
+                    break;
+                }
+                left ++;
+                right --;
+            }
+            if(isPalindrome && j - i + 1 > maxlen)
+			{
+                maxlen = j - i + 1;
+                start = i;
+            }
+        }
+    printf("最长回文子序列: ");
+    for(i = start; i < start + maxlen; i++)
+        printf("%c", s[i]);
+	printf("\n");
+}
+
+int main(void)
+{
+    char s[N];// = "ATGCCTAGGTGAGTTAC";
+    printf("输入字符串：");
+	scanf("%s", s);
+	printf("Manacher算法：");
+    Manacher(s);
+    printf("\n暴力匹配算法：");
+    ForceMatch(s);
+    return 0;
+}
